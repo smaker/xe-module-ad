@@ -112,7 +112,7 @@ class adController extends ad
 				$count = $oAdModel->getAdCount($this->module_srl, $args);
 
 				$m = $oAdModel->getMessageCode('ad_limit_over');
-				if($count>$ad_limit) return $this->oAdModel->returnMessage(-1, sprintf($m, $ad_limit));
+				if($count>$ad_limit) return $oAdModel->returnMessage(-1, sprintf($m, $ad_limit));
 			}
 
 			// 하루 등록 제한
@@ -123,7 +123,7 @@ class adController extends ad
 				$count = $oAdModel->getAdCount($this->module_srl, $args);
 
 				$m = $oAdModel->getMessageCode('daily_limit_over');
-				if($count>$daily_limit) return $this->oAdModel->returnMessage(-1, sprintf($m, $daily_limit));
+				if($count>$daily_limit) return $oAdModel->returnMessage(-1, sprintf($m, $daily_limit));
 			}
 		}
 
