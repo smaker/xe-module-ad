@@ -1,0 +1,6 @@
+.dashboard {display:grid;grid-template-columns:50% 50%}
+.dashboard .ongoing{margin-right:2%}
+.dashboard .ongoing:last-child{margin-right:0}
+.dashboard .ongoing h3 {color:#000 !important;font:14px "Noto Sans KR","나눔바른고딕","NanumBarunGothic"}
+.dashboard .ongoing ul{margin:0 !important;list-style:none}
+.dashboard .ongoing ul li{margin:0 !important;padding:12px;background: #efefef}

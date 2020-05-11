@@ -1,0 +1,194 @@
+<!--%import("css/admin.css")-->
+<!--%import("css/form.css")-->
+<!--#include("ModuleHeader.html")-->
+
+<!--// Load Javascript Plugin (Color Picker) -->
+{@Context::loadJavascriptPlugin('ui.colorpicker')}
+
+<!--%import("js/ad_admin.js")-->
+<!--%import("js/module.js")-->
+
+<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/ad/tpl/ModuleInsert/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
+<form action="./" method="post" ruleset="insertModule" enctype="multipart/form-data" id="fo_insert_module" no-error-return-url="true">
+	<input type="hidden" name="module" value="ad">
+	<input type="hidden" name="act" value="procAdInsertModule">
+	<input type="hidden" name="page" value="{$page}">
+	<input type="hidden" name="module_srl" value="{$module_info->module_srl}">
+	<input cond="$mid || $module_srl" type="hidden" name="success_return_url" value="{getRequestUriByServerEnviroment()}" />
+	<input type="hidden" name="ad_name" value="{$module_info->mid}" cond="$logged_info->is_admin != 'Y'">
+	<input type="hidden" name="xe_validator_id" value="modules/ad/tpl/ModuleInsert/1">
+
+	<section class="section">
+		<h1>{$lang->subtitle_primary}</h1>
+		<div cond="$logged_info->is_admin == 'Y'" class="form-group">
+			<label for="ad_name">{$lang->mid}</label>
+			<input type="text" name="ad_name" id="ad_name" value="{$module_info->mid}" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label for="lang_browser_title">{$lang->browser_title}</label>
+			<input type="text" name="browser_title" id="browser_title" value="<!--@if(strpos($module_info->browser_title, '$user_lang->') === false)-->{$module_info->browser_title}<!--@else-->{htmlspecialchars($module_info->browser_title)}<!--@end-->" class="form-control lang_code" />
+		</div>
+		<div class="form-group">
+			<label for="layout_srl">{$lang->layout}</label>
+			<select name="layout_srl" id="layout_srl" class="form-control">
+				<option value="0">{$lang->notuse}</option>
+				<option loop="$layout_list => $key, $val" value="{$val->layout_srl}" selected="selected"|cond="$module_info->layout_srl== $val->layout_srl">{$val->title} ({$val->layout})</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="skin">{$lang->skin}</label>
+			<select name="skin" id="skin" style="width:auto" class="form-control">
+				<option loop="$skin_list=> $key, $val" value="{$key}" selected="selected"|cond="$module_info->skin== $key || (!$module_info->skin && $key=='default')">{$val->title}</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="ad_type" class="x_control-label">{$lang->ad_type}</label>
+				<select id="ad_type" name="ad_type"<!--@if($module_info->ad_type)--> disabled="disabeld"<!--@end--> class="form-control">
+					<option value="text">{$lang->linead}</option>
+					<option value="image"<!--@if($module_info->ad_type == 'image')--> selected="selected"<!--@end-->>{$lang->image_banner}</option>
+					<option value="movie"<!--@if($module_info->ad_type == 'movie')--> selected="selected"<!--@end--> cond="false">{$lang->movie_banner}</option>
+					<option value="popup"<!--@if($module_info->ad_type == 'popup')--> selected="selected"<!--@end--> cond="false">{$lang->popup_banner}</option>
+				</select>
+				<!--@if($module_info->ad_type)--><input type="hidden" name="ad_type" value="{$module_info->ad_type}" /><!--@end-->
+				
+				<p><!--@if(!$module_info->ad_type)-->{$lang->about_ad_type}<!--@else-->{$lang->about_ad_type2}<!--@end--></p>
+		</div>
+		<div class="form-group">
+			<label for="use_time">{$lang->ad_time}</label>
+			<div class="form-check">
+				<input type="checkbox" id="use_time" name="use_time" id="use_time" value="Y"<!--@if($module_info->use_time == 'Y')--> checked="checked"<!--@end--> class="form-check-input"> <label for="use_time" class="x_inline"><strong>{$lang->use}</strong></label>
+			</div>
+			<p>{$lang->about_ad_time}</p>
+		</div>
+		<div class="form-group">
+			<label for="use_option">{$lang->ad_option}</label>
+			<div class="form-check">
+				<input type="checkbox" id="use_option" name="use_option" id="use_option" value="Y"<!--@if($module_info->use_option && $module_info->use_option != 'N')--> checked="checked"<!--@end--> class="form-check-input"> <label for="use_option" class="x_inline"><strong>{$lang->use}</strong></label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="use_color">{$lang->textcolor}</label>
+			<div class="form-check">
+				<input type="checkbox" name="use_color" id="use_color" value="Y"<!--@if($module_info->use_color == 'Y')--> checked="checked"<!--@end--> class="form-check-input"> <label for="use_color" class="x_inline"><strong>{$lang->use}</strong></label> [{$lang->about_textColor_feature}]
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="use_bgcolor">{$lang->bgcolor}</label>
+			<div class="form-check">
+				<input type="checkbox" name="use_bgcolor" id="use_bgcolor" value="Y"<!--@if($module_info->use_bgcolor == 'Y')--> checked="checked"<!--@end--> class="form-check-input"> <label for="use_bgcolor" class="x_inline"><strong>{$lang->use}</strong></label> [{$lang->about_bgColor_feature}]
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="" style="display: block">{$lang->ad_point}</label>
+			<!--@if($module_info->use_time == 'Y')-->
+			<input type="text" name="ad_point_rate" value="{$module_info->ad_point_rate}" class="form-control" style="width: 60px; display:inline-block" /> <span style="display: inline-block;">{$lang->hourly}</span>
+			<!--@end--> <input type="text" name="ad_point" value="{$module_info->ad_point}" class="form-control" style="width: 60px; display:inline-block"> <span style="display: inline-block">{$lang->point}</span>
+		</div>
+		<div class="form-group">
+			<label for="" style="display: block">{$lang->highlight_point}</label>
+			<input type="text" name="highlight_point" value="{$module_info->highlight_point}" class="form-control" style="width: 60px; display: inline-block"> {$lang->point}<!--@if($module_info->use_option && $module_info->use_option != 'N')--> <input type="checkbox" name="each_highlight_point" id="each_highlight_point" value="Y"<!--@if($module_info->each_highlight_point != 'N')--> checked="checked"<!--@end--> /><label for="each_highlight_point" class="x_inline">{$lang->about_each_highlight_point}</label><!--@end-->
+		</div>
+		<!--@if($module_info->use_time == 'Y')-->
+		<div class="form-group">
+			<label style="display: block;">{$lang->ad_time_range}</label>
+			<input type="hidden" id="hidAdTimeRange" name="ad_time_range" value="{$module_info->ad_time_range}" />
+			<select id="selAdTimeRange" name="_ad_time_range" multiple="multiple" size="1" class="inputList" style="width: 80px"></select>
+			<br />
+			<br />
+			<input type="text" name="_ad_time" class="form-control" style="width: 60px; display: inline-block" /> {$lang->time_word['hour']}
+			<button type="button" class="btn btn-primary" onclick="doInsertAdTime()">{$lang->cmd_insert}</button>
+			<button type="button" class="btn btn-light" onclick="doDeleteAdTime()">{$lang->cmd_delete}</button>
+
+
+			<p class="aboutText">
+			{$lang->about_ad_time_range}
+			</p>
+		</div>
+		<!--@end-->
+		<!--@if($module_info->use_color == 'Y')-->
+		<div class="form-group">
+			<label for="" style="display: block">{$lang->allowed_text_color}</label></th>
+
+			<input type="hidden" id="hiddenColorRange" name="ad_color_range" value="{$module_info->ad_color_range}" />
+			<select id="selColorRange" name="_ad_color_range" multiple="multiple" size="1" class="inputList" style="width: 200px"></select>
+			<br />
+			<br />
+			<input type="text" id="tColor" name="ad_color" value="" class="form-control color-indicator" style="width: 60px; display: inline-block">
+
+			<button type="button" class="btn btn-primary" onclick="doInsertAdColor(jQuery('#tColor').val(), document.getElementById('selColorRange'))">{$lang->cmd_insert}</button>
+			<button type="button" class="btn btn-light" onclick="doDeleteAdColor()">{$lang->cmd_delete}</button>
+			<p>{$lang->about_ad_color_range}</p>
+		</div>
+		<!--@end-->
+		<!--@if($module_info->use_bgcolor == 'Y')-->
+		<div class="form-group">
+			<label for="" style="display: block">{$lang->allowed_bg_color}</label>
+			<input type="hidden" name="ad_bgcolor_range" value="{$module_info->ad_bgcolor_range}">
+			<select name="_ad_bgcolor_range" multiple="multiple" size="1" class="inputList" style="width: 200px"></select>
+			<br>
+			<br>
+			<input type="text" name="ad_bgcolor" value="" class="form-control color-indicator" style="width: 60px; display: inline-block">
+	
+			<button type="button" onclick="doInsertAdBgColor()" class="btn btn-secondary">{$lang->cmd_insert}</button>
+			<button type="button" onclick="doDeleteAdBgColor()" class="btn btn-light">{$lang->cmd_delete}</button>
+			<p>{$lang->about_ad_bgrange}</p>
+		</div>
+		<!--@end-->
+		<div class="form-group">
+			<label style="display: block;">{$lang->ad_limit}</label>
+			<input type="text" name="ad_limit" value="{$module_info->ad_limit}" class="form-control" style="width:60px; display: inline-block"> <span style="display: inline-block">개</span>
+			<p>{$lang->about_ad_limit}</p>
+		</div>
+			<div class="form-group">
+				<label style="display: block;">{$lang->daily_limit}</label>
+				<input type="text" name="daily_limit" value="{$module_info->daily_limit}" class="form-control" style="width:60px; display: inline-block" /> 개
+				<p>{$lang->about_daily_limit}</p>
+			</div>
+			<div class="form-group">
+				<label>{$lang->description}</label>
+				<div class="x_controls">
+					<textarea name="description" class="form-control fullWidth">{htmlspecialchars($module_info->description)}</textarea>
+					<p>{$lang->about_description}</p>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="">{$lang->header_text}</label>
+				<textarea name="header_text" class="form-control fullWidth" id="header_text">{htmlspecialchars($module_info->header_text)}</textarea>
+				<a href="{getUrl('','module','module','act','dispModuleAdminLangcode','target','header_text')}" onclick="popopen(this.href);return false;" class="buttonSet buttonSetting"><span>{$lang->cmd_find_langcode}</span></a>
+			</div>
+			<div class="form-group">
+				<label>{$lang->footer_text}</label>
+				<textarea name="footer_text" class="form-control fullWidth" id="footer_text">{htmlspecialchars($module_info->footer_text)}</textarea>
+				<a href="{getUrl('','module','module','act','dispModuleAdminLangcode','target','footer_text')}" onclick="popopen(this.href);return false;" class="buttonSet buttonSetting"><span>{$lang->cmd_find_langcode}</span></a>
+			</div>
+	</section>
+	<section class="section">
+		<h1>{$lang->mobile_settings}</h1>
+		<div class="form-group">
+			<label for="use_mobile">{$lang->mobile_view}</label>
+			<div class="form-check">
+				<label for="use_mobile"><input type="checkbox" name="use_mobile" id="use_mobile" value="Y" checked="checked"|cond="$module_info->use_mobile == 'Y'"> {$lang->about_mobile_view}</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="mlayout_srl">{$lang->mobile_layout}</label>
+			<select name="mlayout_srl" id="mlayout_srl" class="form-control">
+				<option value="0">{$lang->notuse}</option>
+				<option loop="$mlayout_list => $key, $val" value="{$val->layout_srl}" selected="selected"|cond="$module_info->mlayout_srl== $val->layout_srl">{$val->title} ({$val->layout})</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="mskin">{$lang->mobile_skin}</label>
+			<select name="mskin" id="mskin" class="form-control">
+				<option loop="$mskin_list=> $key, $val" value="{$key}" selected="selected"|cond="$module_info->mskin== $key || (!$module_info->skin && $key=='default')">{$val->title}</option>
+			</select>
+		</div>
+		<div class="btnArea">
+			<input type="submit" value="{$lang->cmd_registration}" accesskey="s" class="btn btn-secondary">
+			<a href="{getUrl('act','dispAdAdminModuleList','module_srl','')}" class="btn btn-light">{$lang->cmd_back}</a>
+		</div>
+	</section>
+</form>

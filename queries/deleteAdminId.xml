@@ -1,0 +1,8 @@
+<query id="deleteAdminId" action="delete">
+	<tables>
+		<table name="ad_admin" />
+	</tables>
+	<conditions>
+		<condition operation="equal" column="member_srl" var="member_srl" filter="number" />
+	</conditions>
+</query>

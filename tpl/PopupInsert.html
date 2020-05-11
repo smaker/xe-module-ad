@@ -1,0 +1,63 @@
+<load target="../../admin/tpl/js/admin.js" />
+<load target="../../admin/tpl/js/jquery.tmpl.js" />
+<load target="css/admin.css" />
+
+<form action="./" method="post" class="x_form-horizontal" ruleset="insertPopup">
+	<input type="hidden" name="module" value="ad">
+	<input type="hidden" name="act" value="procAdInsertPopup">
+	<input type="hidden" name="document_srl" value="{$oDocument->get('document_srl')}">
+	<input type="hidden" name="content" value="{$oDocument->getContentText()}">
+
+	<section class="section">
+		<h1>기본 설정</h1>
+		<div class="x_control-group">
+			<label for="" class="x_control-label">페이지 선택 <span class="required">*</span></label>
+			<div class="x_controls">
+				<select name="module_srl">
+					<!--@foreach($target_modules as $key => $val)-->
+					<option value="{$val->module_srl}" <!--@if($popup_info->target_srl==$val->module_srl)-->selected="selected"<!--@end-->>({$key}) {$val->browser_title}</option>
+					<!--@end-->
+				</select>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label for="popup_title" class="x_control-label">{$lang->popup_title} <span class="required">*</span></label>
+			<div class="x_controls">
+				<input type="text" name="popup_title" id="popup_title">
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label for="popup_width" class="x_control-label">{$lang->popup_width} <span class="required">*</span></label>
+			<div class="x_controls">
+				<input type="number" name="popup_width" id="popup_width" min="1"> px
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label for="popup_height" class="x_control-label">{$lang->popup_height} <span class="required">*</span></label>
+			<div class="x_controls">
+				<input type="number" name="popup_height" value="popup_height" min="1"> px
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label for="popup_left" class="x_control-label">{$lang->popup_left} <span class="required">*</span></label>
+			<div class="x_controls">
+				<input type="number" name="popup_left" id="popup_left" min="1"> px
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label for="popup_top" class="x_control-label">{$lang->popup_top} <span class="required">*</span></label>
+			<div class="x_controls">
+				<input type="number" name="popup_top" id="popup_top" min="1"> px
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label for="" class="x_control-label">팝업 내용 <span class="required">*</span></label>
+			<div class="x_controls">
+				{$oDocument->getEditor()}
+			</div>
+		</div>
+		<div class="btnArea">
+			<input type="submit" class="x_btn x_btn-primary" value="{$lang->cmd_submit}">
+		</div>
+	</section>
+</form>

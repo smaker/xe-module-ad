@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+	<grants>
+		<grant name="register_ad" default="member">
+			<title xml:lang="ko">광고 등록</title>
+		</grant>
+		<grant name="highlight_ad" default="member">
+			<title xml:lang="ko">광고 강조</title>
+		</grant>
+		<grant name="url_link" default="member">
+			<title xml:lang="ko">URL 링크</title>
+		</grant>
+		<grant name="unlimited_ad" default="manager">
+			<title xml:lang="ko">무제한 광고</title>
+		</grant>
+	</grants>
+	<permissions />
+	<actions>
+		<!-- 관리자 시작 -->
+		<action name="dispAdDashboard" type="view" standalone="true" admin_index="true" />
+		<action name="dispAdConfig" type="view" standalone="true" />
+
+		<action name="dispAdModuleInfo" type="view" standalone="true" />
+		<action name="dispAdModuleGrantInfo" type="view" standalone="true" />
+		<action name="dispAdModuleSkinInfo" type="view" standalone="true" />
+		<action name="dispAdModuleAdTimeRange" type="view" standalone="true" />
+
+		<action name="dispAdInsertModule" type="view" standalone="true" setup_index="true" />
+		<action name="dispAdDeleteModule" type="view" standalone="true" />
+
+		<action name="dispAdManageList" type="view" standalone="true" />
+		<!-- 공지 작성 -->
+		<action name="dispAdNoticeWrite" type="view" standalone="true" />
+		<!-- 공지 목록-->
+		<action name="dispAdNoticeList" type="view" standalone="true" />
+		<!-- 페이지 (모듈) 관리 -->
+		<action name="dispAdModuleList" type="view" standalone="true" />
+		<!-- 팝업 관리 -->
+		<action name="dispAdPopupList" type="view" standalone="true" />
+		<action name="dispAdPopupInsert" type="view" standalone="true" />
+		<action name="dispAdPluginSetup" type="view" standalone="true" />
+		<action name="dispAdModifyAd" type="view" standalone="true" />
+
+		<action name="dispAdContent" type="view" index="true" />
+		<action name="dispAdContentView" type="view" />
+		<action name="dispAdModify" type="view" />
+		<action name="dispAdDelete" type="view" />
+		<action name="dispAdExtend" type="view" />
+
+		<action name="procAdRegister" type="controller" />
+		<action name="procAdModify" type="controller" />
+		<action name="procAdDelete" type="controller" />
+
+		<action name="procAdInsertConfig" type="controller" standalone="true" />
+		<action name="procAdInsertModule" type="controller" standalone="true" />
+		<action name="procAdInsertPopup" type="controller" standalone="true" />
+		<action name="procAdDeleteModule" type="controller" standalone="true" />
+		<action name="procAdDeleteChecked" type="controller" standalone="true" />
+		<action name="procAdNoticeWrite" type="controller" standalone="true" />
+		<action name="procAdModifyAd" type="controller" />
+	</actions>
+</module>

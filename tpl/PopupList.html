@@ -1,0 +1,20 @@
+<h2><i class="xi-browser" aria-hidden="true"></i> 팝업 관리</h2>
+
+<table class="x_table">
+	<thead>
+		<tr>
+			<th>{$lang->no}</th>
+			<th>팝업 제목</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr loop="$popup_list => $key, $popup">
+			<td>{$key}</td>
+			<td></td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>
+
+<a href="{getUrl('act', 'dispAdPopupInsert')}" class="x_btn x_btn-inverse"><i class="xi-plus"></i> 팝업 등록</a>

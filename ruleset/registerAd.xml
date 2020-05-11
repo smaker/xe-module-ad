@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ruleset version="1.5.0">
+	<customrules>
+	</customrules>
+	<fields>
+		<field name="site_name" maxlength="100" required="true" />
+		<field name="banner_image" required="true" />
+		<field name="ad_content" maxlength="100">
+			<if test="!$site_name" attr="required" value="true" />
+		</field>
+		<field name="url" />
+		<field name="url_target" />
+		<field name="ad_time" required="true" />
+	</fields>
+</ruleset>

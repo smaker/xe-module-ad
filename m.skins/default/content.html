@@ -1,0 +1,125 @@
+<!--#include("header.include.html")-->
+
+<!--@if($module_info->ad_type == 'popup')-->
+팝업 광고는 지원하지 않는 기능입니다.
+<!--@else-->
+	<!--// iCheck plugin -->
+	<load target="assets/dist/icheck/skins/minimal/red.css" />
+	<load target="assets/dist/icheck/js/icheck.min.js" />
+	<!--// xeicon -->
+	<load target="https://cdn.jsdelivr.net/gh/xpressengine/xeicon@2.3.3/xeicon.min.css" />
+
+	<load target="assets/dist/css/style.css" />
+	<load target="assets/dist/js/bundle.js" />
+
+	<!--// 광고 목록 -->
+	<ul class="adList" cond="count($ad_list) > 0">
+		<li loop="$ad_list => $no, $ad">
+			<span class="notice" cond="$ad->isNotice()">{$lang->notice}</span>
+			<span class="normal" cond="!$ad->isNotice()">일반</span>
+
+			<span class="adContent" cond="$module_info->ad_type === 'text'">{$ad->getAdContent($module_info->content_cut_size, false, $ad->get('ad_type'))}</span>
+			<span class="adContent" cond="$module_info->ad_type === 'image'">{$ad->getAdContent($module_info->content_cut_size, false, $ad->get('ad_type'))}</span>
+
+			<a href="{getUrl('act', 'dispAdDelete', 'document_srl', $ad->get('document_srl'))}" class="buttonDelete" cond="$ad->isGranted()" title="{$lang->cmd_delete_ad}"><i class="xi-close-min"></i></a>
+		</li>
+	</ul>
+
+	<form ruleset="registerAd" method="post" enctype="multipart/form-data" cond="$grant->register_ad">
+		<input type="hidden" name="mid" value="{$mid}">
+		<input type="hidden" name="vid" value="{$vid}">
+		<input type="hidden" name="act" value="procAdRegister">
+		<input type="hidden" name="xe_validator_id" value="/modules/ad/skins/xe_default/1">
+
+		<div class="AdOption">
+			<!--@if($grant->manager && $module_info->ad_type === 'text')-->
+				<input type="checkbox" name="is_notice" id="is_notice" value="Y" class="iCheck"> <label for="is_notice"><strong style="color:#f42126">{$lang->notice}</strong></label>
+			<!--@end-->
+			<!--@if($grant->highlight_ad && $module_info->use_option != '')-->
+				<input type="checkbox" name="used_style[]" id="use_bold" value="bold" class="iCheck"> <label for="use_bold"><strong>{$lang->bold}</strong></label> 
+				<input type="checkbox" name="used_style[]" id="use_underline" value="underline" class="iCheck"> <label for="use_underline"><u>{$lang->underline}</u></label> 
+				<input type="checkbox" name="used_style[]" id="use_italic" value="italic" class="iCheck"> <label for="use_italic"><i>{$lang->italic}</i></label>
+			<!--@end-->
+
+		<!--@if($grant->highlight_ad && $module_info->use_option != '')-->
+		<!--@if($module_info->use_color == 'Y')-->
+		<div class="" style="display:inline-block;position:relative;float:right;">
+		{@ $AdColorRange = explode(',',$module_info->ad_color_range)}
+			{$lang->text_color} :
+			<label for="ad_color"><img src="assets/dist/img/color-picker.png" alt=""></label>
+			<div class="colorOverlay"></div>
+			<select name="ad_color" id="ad_color" class="colorPicker">
+				<optgroup label="글자색 선택">
+					<option value="-1">선택 안함</option>
+					<!--@foreach($AdColorRange as $key => $val)-->
+					<option value="{$val}" style="color:{$val};background-color:{$val};">{$val}</option>
+					<!--@endforeach-->
+				</optgroup>
+			</select>
+		</div>
+		<!--@end-->
+		<!--@if($module_info->use_bgcolor == 'Y')-->
+		<div style="display:inline-block;position:relative;float:right;">
+			{@ $AdBgColorRange = explode(',',$module_info->ad_bgcolor_range)}
+				{$lang->bg_color} :
+				<label for="ad_bgcolor"><img src="assets/dist/img/color-picker.png" alt=""></label>
+				<div class="colorOverlay"></div>
+				<select name="ad_bgcolor" id="ad_bgcolor" class="colorPicker" style="opacity: 0;position : absolute;left:45px;width:24px;height:24px">
+					<optgroup label="배경색 선택">
+						<option value="-1">선택 안함</option>
+						<!--@foreach($AdBgColorRange as $key => $val)-->
+						<option value="{$val}" style="color:{$val};background-color:{$val};">{$val}</option>
+						<!--@endforeach-->
+					</optgroup>
+				</select>
+			<!--@end-->
+			<span class="divider"></span>
+		</div>
+			<!--@end-->
+		</div>
+
+		<!--@if($module_info->ad_type == 'text')-->
+		<input type="text" name="ad_content" value="" class="inputTypeText d-block" placeholder="{$lang->ad_content}">
+		<!--@elseif($module_info->ad_type == 'image')-->
+		<input type="text" name="site_name" value="" class="inputTypeText d-block" placeholder="{$lang->site_name}">
+		<input type="file" name="banner_image" accept="image/*" class="inputTypeText d-block" placeholder="{$lang->banner_image}" title="배너 이미지 선택" style="margin-top: 5px">
+		<!--@end-->
+		
+		<select name="ad_time" class="inputTypeSelect" style="margin-top: 5px; margin-bottom: 5px; padding:5px 0 5px 3px">
+			<option value="">광고 시간</option>
+			<!--@if($grant->unlimited_ad)--><option value="-1">{$lang->unlimited}</option><!--@end-->
+			<!--@if(is_array($ad_time_range) && count($ad_time_range))-->
+			<!--@foreach($ad_time_range as $key => $val)-->
+			<option value="{$val['time']}">{$val['title']}</option>
+			<!--@endforeach-->
+			<!--@else-->
+			<!--@end-->
+		</select>
+		<!--@if($grant->url_link)-->
+		<div style="margin-bottom: 5px;">
+			<input type="text" name="url" value="" class="inputTypeText" placeholder="URL" style="width: 69%">
+			<select name="url_target" class="inputTypeSelect" style="width: 30%">
+				<option value="_blank">{$lang->new_window}</option>
+				<option value="_self">{$lang->current_window}</option>
+			</select>
+		</div>
+		<!--@end-->
+		<div style="text-align: right;">
+			<input type="submit" value="{$lang->ad_reg}" class="buttonRegist">
+		</div>
+	</form>
+
+	<!--#include("register.html")-->
+<!--@end-->
+
+<script>
+	var $ = jQuery;
+	$(function() {
+		$('.adXE .iCheck').iCheck({
+			checkboxClass: 'icheckbox_minimal-red'
+		});
+	});
+</script>
+
+
+<!--#include("footer.include.html")-->

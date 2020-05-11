@@ -1,0 +1,12 @@
+<query id="getAdminID" action="select">
+	<tables>
+		<table name="ad_admin" />
+		<table name="member" />
+	</tables>
+	<columns>
+		<column name="*" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="member.member_srl" default="ad_admin.member_srl" />
+	</conditions>
+</query>

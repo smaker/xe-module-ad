@@ -1,0 +1,183 @@
+<script>
+// XE 기본 스타일 제거
+jQuery("link[rel=stylesheet][href*='common/css/xe.css']").remove();
+jQuery("link[rel=stylesheet][href*='common/css/xe.min.css']").remove();
+</script>
+
+<load target="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" />
+<load target="global_assets/css/icons/icomoon/styles.min.css" />
+
+<load target="assets/css/bootstrap.min.css" />
+<load target="assets/css/bootstrap_limitless.min.css" />
+<load target="assets/css/layout.min.css" />
+<load target="assets/css/components.min.css" />
+<load target="assets/css/colors.min.css" />
+
+<!-- Core JS files -->
+<load target="global_assets/js/main/bootstrap.bundle.min.js" />
+<load target="global_assets/js/plugins/loaders/blockui.min.js" />
+<!-- /core JS files -->
+
+<!-- Theme JS files -->
+<load target="global_assets/js/plugins/visualization/d3/d3.min.js" />
+<load target="global_assets/js/plugins/visualization/d3/d3_tooltip.js" />
+<load target="global_assets/js/plugins/forms/styling/switchery.min.js" />
+<load target="global_assets/js/plugins/forms/selects/bootstrap_multiselect.js" />
+<load target="global_assets/js/plugins/ui/moment/moment.min.js" />
+<load target="global_assets/js/plugins/pickers/daterangepicker.js" />
+
+<load target="assets/js/app.js" />
+<load target="global_assets/js/demo_pages/dashboard.js" />
+
+<load target="js/ad_admin.js" />
+
+<load target="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<div id="adXE">
+    <!--#include("DashboardHeader.html")-->
+
+    <!--// Content -->
+	<!-- Page content -->
+	<div class="page-content pt-0">
+
+		<!-- Main sidebar -->
+		<div class="sidebar sidebar-light sidebar-main sidebar-expand-md align-self-start">
+
+			<!-- Sidebar mobile toggler -->
+			<div class="sidebar-mobile-toggler text-center">
+				<a href="#" class="sidebar-mobile-main-toggle">
+					<i class="icon-arrow-left8"></i>
+				</a>
+				<span class="font-weight-semibold">Main sidebar</span>
+				<a href="#" class="sidebar-mobile-expand">
+					<i class="icon-screen-full"></i>
+					<i class="icon-screen-normal"></i>
+				</a>
+			</div>
+			<!-- /sidebar mobile toggler -->
+
+
+			<!-- Sidebar content -->
+			<div class="sidebar-content">
+				<div class="card card-sidebar-mobile">
+					<div class="card-header header-elements-inline">
+						<h6 class="card-title">{$lang->menu}</h6>
+						<div class="header-elements">
+							<div class="list-icons">
+								<a class="list-icons-item" data-action="collapse"></a>
+							</div>
+						</div>
+					</div>
+					<!-- User menu -->
+					<div class="sidebar-user">
+						<div class="card-body">
+							<div class="media">
+								<div class="mr-3">
+									<a href="#">
+									<!--@if($logged_info->profile_image->src)-->
+										<img src="{$logged_info->profile_image->src}" width="38" height="38" class="rounded-circle" alt="">
+									<!--@else-->
+										<img src="global_assets/images/placeholders/placeholder.jpg" width="38" height="38" class="rounded-circle" alt="">
+									<!--@end-->
+									</a>
+								</div>
+
+								<div class="media-body">
+									<div class="media-title font-weight-semibold">{$logged_info->nick_name}</div>
+								</div>
+
+								<div class="ml-3 align-self-center">
+									<a href="#" class="text-white"><i class="icon-cog3"></i></a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /user menu -->
+
+					
+					<!-- Main navigation -->
+					<div class="card-body p-0">
+						<ul class="nav nav-sidebar" data-nav-type="accordion">
+							<!-- Main -->
+							<li class="nav-item-header mt-0"><div class="text-uppercase font-size-xs line-height-xs">Main</div> <i class="icon-menu" title="Main"></i></li>
+							<li class="nav-item">
+								<a href="{getUrl('', 'module', 'ad', 'act', 'dispAdDashboard')}" class="nav-link<!--@if($act === 'dispAdDashboard')--> active<!--@end-->">
+									<i class="icon-home4"></i>
+									<span>
+										대시보드
+									</span>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="{getUrl('', 'module', 'ad', 'act', 'dispAdConfig')}" class="nav-link<!--@if($act == 'dispAdConfig')--> active<!--@end-->">
+									<i class="icon-cog" aria-hidden="true"></i> 
+									<span>
+										기본 설정
+									</span>
+								</a>
+							</li>
+							<li class="nav-item nav-item-submenu">
+								<a href="{getUrl('', 'module', 'ad', 'act', 'dispAdManageList')}" class="nav-link<!--@if($act == 'dispAdManageList')--> active<!--@end-->"><i class="icon-copy"></i> <span>광고 관리</span></a>
+
+								<ul class="nav nav-group-sub" data-submenu-title="Ads">
+									<li class="nav-item"><a href="{getUrl('', 'module', 'ad', 'act', 'dispAdManageList')}" class="nav-link">모든 광고</a></li>
+									<li class="nav-item"><a href="{getUrl('', 'module', 'ad', 'act', 'dispAdManageList', 'status', 'ongoing')}" class="nav-link">진행중인 광고</a></li>
+									<li class="nav-item"><a href="{getUrl('', 'module', 'ad', 'act', 'dispAdManageList', 'status', 'ended')}" class="nav-link">종료된 광고</a></li>
+								</ul>
+
+								<ul class="nav nav-group-sub" data-submenu-title="Ads">
+									<li class="nav-item"><a href="{getUrl('', 'module', 'ad', 'act', 'dispAdManageList', 'ad_type', 'linead')}" class="nav-link">한줄 광고</a></li>
+									<li class="nav-item"><a href="{getUrl('', 'module', 'ad', 'act', 'dispAdManageList', 'ad_type', 'banner')}" class="nav-link">이미지 광고</a></li>
+								</ul>
+							</li>
+							<li class="nav-item nav-item-submenu">
+								<a href="#" class="nav-link<!--@if($act == 'dispAdNoticeList' || $act=== 'dispAdNoticeWrite')--> active<!--@end-->"><i class="icon-color-sampler"></i> <span>공지 관리</span></a>
+
+								<ul class="nav nav-group-sub" data-submenu-title="Ads">
+									<li class="nav-item"><a href="{getUrl('', 'module', 'ad', 'act', 'dispAdNoticeList')}" class="nav-link">공지 목록</a></li>
+									<li class="nav-item"><a href="{getUrl('', 'module', 'ad', 'act', 'dispAdNoticeWrite')}" class="nav-link">공지 작성</a></li>
+								</ul>
+							</li>
+							<li class="nav-item nav-item-submenu">
+								<a href="{getUrl('', 'module', 'ad', 'act', 'dispAdModuleList')}" class="nav-link<!--@if($act == 'dispAdModuleList' || $act === 'dispAdInsertModule')--> active<!--@end-->"><i class="icon-stack"></i> <span>페이지 관리</span></a>
+
+								<ul class="nav nav-group-sub" data-submenu-title="Page List">
+									<li class="nav-item"><a href="{getUrl('', 'module', 'ad', 'act', 'dispAdModuleList')}" class="nav-link">페이지 목록</a></li>
+									<li class="nav-item"><a href="{getUrl('', 'module', 'ad', 'act', 'dispAdInsertModule')}" class="nav-link">페이지 생성</a></li>
+								</ul>
+							</li>
+							<!-- /main -->
+								
+						</ul>
+					</div>
+					<!-- /main navigation -->
+
+				</div>
+			</div>
+			<!-- /sidebar content -->
+			
+		</div>
+		<!-- /main sidebar -->
+
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Content area -->
+			<div class="content">
+				<h2 cond="$lang->ads->dashboard_menus[Context::get('act')]"><i class="{$lang->ads->dashboard_icon[Context::get('act')]}" cond="$lang->ads->dashboard_icon[Context::get('act')]"></i> {$lang->ads->dashboard_menus[Context::get('act')]}</h2>
+				{$content}
+			</div>
+			<!-- /content area -->
+
+		</div>
+		<!-- /main content -->
+
+	</div>
+	<!-- /page content -->
+
+    <!--// Footer -->
+    <!--#include("DashboardFooter.html")-->
+</div>

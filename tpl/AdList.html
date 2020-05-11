@@ -1,0 +1,174 @@
+<!--%import("filter/delete_checked.xml")-->
+
+<load target="css/admin.css" />
+<load target="css/ad_list.css" />
+
+<!--// Search -->
+<form action="{getUrl()}" method="get" no-error-return-url="true">
+	<input type="hidden" name="module" value="ad">
+	<input type="hidden" name="act" value="dispAdManageList">
+
+	<div class="form-row align-items-center">
+		<div class="col-auto my-1">
+			<select name="search_target" class="form-control custom-select">
+				<option value="" selected>{$lang->search_target}</option>
+				<!--@foreach($lang->_search_target_list as $key => $val)-->
+				<option value="{$key}" selected|cond="$search_target == $key">{$val}</option>
+				<!--@end-->
+			</select>
+		</div>
+		<div class="col-auto my-1">
+			<input type="text" name="search_keyword" value="{$search_keyword}" class="form-control">
+		</div>
+		<div class="col-auto my-1">
+			<button type="submit" class="btn btn-primary">{$lang->cmd_search}</button>
+			<a href="{getUrl('module','admin','dispAdTotalList')}" class="btn btn-light">{$lang->cmd_cancel}</a>
+		</div>
+	</div>
+</form>
+
+<!--// Ad List -->
+<form id="fo_list" action="{getUrl()}" class="card" method="post" ruleset="deleteChecked">
+	<input type="hidden" name="module" value="ad">
+	<input type="hidden" name="act" value="procAdDeleteChecked">
+
+	<div class="table-responsive">
+		<table cellspacing="0" class="table">
+			<thead>
+			<tr>
+				<th scope="row"><input type="checkbox" onclick="XE.checkboxToggleAll(); return false;"></th>
+				<th scope="row">{$lang->status}</th>
+				<th scope="row">{$lang->ad_code}</th>
+				<th scope="row">{$lang->ad_type}</th>
+				<th scope="row">{$lang->ad_time}</th>
+				<th scope="row">{$lang->module_instance}</th>
+				<th scope="row">{$lang->ad_content}</th>
+				<th scope="row">{$lang->ads->author}</th>
+				<th scope="row">{$lang->ads->regdate}</th>
+				<th scope="row">{$lang->click_count}</th>
+				<th scope="row">{$lang->cmd_modify}</th>
+			</tr>
+			</thead>
+			<!--@if(count($ad_list)>0)-->
+			<!--@foreach($ad_list as $no => $ad)-->
+			{@ $remainingTime = $ad->getRemainingTime()}
+			<!--@if($remainingTime)-->
+				{@ $publishedStatus = 1}
+			<!--@else-->
+				<!--@if($ad->get('end_date') == -1)-->
+					{@ $publishedStatus = 2}
+				<!--@end-->
+			<!--@end-->
+			{@ $AdType = $ad->get('ad_type')}
+			<!--@if(($ad->get('ad_time') % 10000) === 0)-->
+			{@
+				$AdTime = $ad->get('ad_time') / 10000;
+				$AdTimeUnit = $lang->ads->unit_time->hour;
+			}
+			<!--@end-->
+			<tbody>
+			<tr>
+				<td><input type="checkbox" name="cart" value="{$ad->document_srl}" /></td>
+				<td>
+					<!--@if($ad->get('publish_status') === 'published')-->
+					<strong class="badge badge-danger" style="font-size: 12px"><span>{$lang->ads->status->published}</span></strong>
+					<!--@elseif($ad->get('publish_status') === 'wait')-->
+					<strong class="badge badge-light" style="font-size: 12px"><span>{$lang->ads->status->wait}</span></strong>
+					<!--@elseif($publishedStatus)-->
+					<strong class="badge badge-danger" style="font-size: 12px"><span>{$lang->ads->status->published}</span></strong>
+					<!--@elseif(!$publishedStatus)-->
+					<strong class="badge draft"><span>{$lang->ads->status->end}</span></strong>
+					<!--@else-->
+					<strong class="badge draft"><span>{$lang->ads->status->end}</span></strong>
+					<!--@end-->
+				</td>
+				<td class="text-center">
+					{$ad->get('document_srl')}
+				</td>
+				<td>
+					<!--@if($AdType == 'linead')-->
+					{$lang->linead}
+					<!--@elseif($AdType == 'banner')-->
+					{$lang->banner}
+					<!--@end-->
+				</td>
+				<td>
+					<!--@if($ad->get('ad_time') == -1)-->{$lang->unlimited}<!--@elseif($AdTime)-->{$AdTime}{$AdTimeUnit}<!--@end-->
+				</td>
+				<td>
+					<a href="{getUrl('', 'mid', $ad->get('mid'))}" target="_blank">{$ad->get('browser_title')} <i class="icon-new-tab"></i></a>
+				</td>
+				<td>{$ad->getAdContent(100, false, $ad->get('ad_type'))}</td>
+				<td>
+					<a href="#popup_menu_area" class="member_{$ad->get('member_srl')} text-body">{$ad->get('nick_name')}</a>
+				</td>
+				<td>{$ad->getRegdate()}</td>
+				<td>{$ad->get('readed_count')}</td>
+				<td>
+					<a href="{getUrl('act', 'dispAdModifyAd', 'document_srl', $ad->get('document_srl'))}">{$lang->cmd_modify}</a>
+				</td>
+			</tr>
+			<tr>
+				<td class="text-left itemsRow" colspan="11">
+					<ul class="items">
+						<!--@if($ad->getUrl())--><li>URL : {$ad->getUrl()}</li><!--@end-->
+						<!--@if($remainingTime)--><li>{$lang->remaining_time} : {$remainingTime}</li><!--@end-->
+						<li cond="$AdType == 'banner' || $AdType == 'movie'">
+							템플릿 코드
+							<textarea cols="30" rows="2" class="code form-control">&#x7B;ad_image({$ad->get('document_srl')})&#x7D;</textarea>
+						</li>
+						<li>
+							HTML 코드
+							<textarea cols="30" rows="2" class="code form-control">&lt;a href="{$ad->getPermanentUrl()}" target="_blank"&gt;<!--@if($AdType == 'banner')--><img src="{$ad->getFullBannerPath()}"><!--@else-->{$ad->getAdContent()}<!--@end-->&lt;a&gt;</textarea>
+						</li>
+					</ul>
+				</td>
+			</tr>
+			<!--@end-->
+			<!--@else-->
+			<tr>
+				<td class="text-center" colspan="9" cond="!in_array($status, array('ongoing', 'ended'))">{$lang->ads->msg->not_exists_registered_ads}</td>
+				<td class="text-center" colspan="9" cond="$status === 'ongoing'">{$lang->ads->msg->not_exists_remaining_ads}</td>
+				<td class="text-center" colspan="9" cond="$status === 'ended'">{$lang->ads->msg->not_exists_ended_ads}</td>
+			</tr>
+			<!--@end-->
+			</tbody>
+		</table>
+	</div>
+	<div class="btnArea">
+		<button name="action" value="delete" type="submit" class="btn btn-secondary float-right mr-3 mb-3"><i class="icon-bin"></i> 선택 삭제</button>
+		<div class="btn-group float-right mr-3">
+			<button name="action" value="publish" type="submit" class="btn btn-success float-right mb-3"><i class="icon-checkmark"></i> 발행하기</button>
+			<button name="action" value="wait"  type="submit" class="btn btn-light float-right mb-3"><i class="icon-cross"></i> 발행중지</button>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</form>
+
+<div class="clearfix" style="margin: 0 0 12px">
+	<form aria-label="Page navigation" cond="$page_navigation" no-error-return-url="true">
+		<input type="hidden" name="module" value="{$module}">
+		<input type="hidden" name="act" value="{$act}">
+		<input cond="$order_target" type="hidden" name="order_target" value="{$order_target}">
+		<input cond="$order_type" type="hidden" name="order_type" value="{$order_type}">
+		<input cond="$search_keyword" type="hidden" name="search_keyword" value="{$search_keyword}">
+
+		<ul class="pagination justify-content-center">
+			<li class="page-item<!--@if(!$page || $page == 1)--> disabled<!--@end-->"><a href="{getUrl('page', '')}" class="page-link">&laquo; {$lang->first_page}</a></li>
+			<!--@while($page_no = $page_navigation->getNextPage())-->
+			{@$last_page = $page_no}
+			<li class="page-item<!--@if($page_no == $page)--> active<!--@end-->"><a href="{getUrl('page', $page_no)}" class="page-link">{$page_no}</a></li>
+			<!--@end-->
+
+			<li class="page-item<!--@if($page == $page_navigation->last_page)--> disabled<!--@end-->"><a href="{getUrl('page', $page_navigation->last_page)}" title="{$page_navigation->last_page}" class="page-link">{$lang->last_page} &raquo;</a></li>
+		</ul>
+	</form>
+</div>
+
+<script>
+	var $ = jQuery;
+
+	$('textarea.code').focus(function() {
+		$(this).select();
+	});
+</script>

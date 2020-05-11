@@ -1,0 +1,11 @@
+<table name="ad_popup" action="select">
+	<!-- 팝업 번호 -->
+	<column name="popup_srl" type="number" size="11" notnull="notnull" primary_key="primary_key" />
+	<!-- 문서 번호 -->
+	<column name="document_srl" type="number" size="11" notnull="notnull" unique="unique_document_srl" />
+	<column name="width" type="number" size="4" notnull="notnull" />
+	<column name="height" type="number" size="4" notnull="notnull" />
+	<!-- 팝업 위치 -->
+	<column name="top" type="number" size="4" />
+	<column name="left" type="number" size="4" />
+</table>

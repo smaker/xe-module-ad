@@ -1,0 +1,18 @@
+<query id="getEndedAdList" action="select">
+    <tables>
+        <table name="documents" alias="D" />
+        <table name="ad" alias="A" type="left join">
+            <conditions>
+                <condition operation="equal" column="A.document_srl" default="D.document_srl" />
+            </conditions>
+        </table>
+    </tables>
+    <conditions>
+        <condition operation="more" column="A.end_date" var="end_date" default="curdate()" pipe="and" />
+        <condition operation="equal" column="A.ad_type" var="ad_type" pipe="and" />
+        <condition operation="equal" column="A.publish_status" var="publish_status" pipe="and" />
+    </conditions>
+	<navigation>
+		<index var="sort_index" default="D.list_order" order="order_type" />
+	</navigation>
+</query>

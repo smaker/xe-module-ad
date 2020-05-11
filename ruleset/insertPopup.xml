@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ruleset version="1.5.0">
+	<fields>
+		<field name="popup_title" required="true" />
+		<field name="popup_width" required="true" />
+		<field name="popup_height" required="true" />
+		<field name="popup_left" required="true" />
+		<field name="popup_top" required="true" />
+		<field name="content" required="true" />
+	</fields>
+</ruleset>

@@ -1,0 +1,108 @@
+<div class="page-header">
+    <h1><i class="icon-pencil"></i> {$lang->modify_ad}</h1>
+</div>
+
+<form action="{getUrl()}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="module" value="ad">
+    <input type="hidden" name="act" value="procAdModifyAd">
+    <input type="hidden" name="document_srl" value="{$oAd->get('document_srl')}">
+    <input type="hidden" name="success_return_url" value="{getNotEncodedUrl('', 'mid', $mid, 'act', 'dispAdModifyAd', 'document_srl', $oAd->get('document_srl'))}">
+
+    {@
+        $adType = $oAd->get('ad_type');
+    }
+    <div class="form-group">
+        <!--@if($adType == 'linead')-->
+        <label for="ad_content">{$lang->ad_content}</label>
+        <!--@elseif($adType == 'banner')-->
+        <label for="ad_content">{$lang->banner_image}</label>
+        <!--@end-->
+
+        <block cond="$adType == 'linead'">
+            <input type="text" name="ad_content" id="ad_content" value="{$oAd->getAdContentText()}" class="form-control">
+        </block>
+        <div cond="$adType == 'banner'">
+            <img src="{$oAd->getBannerPath()}">
+            <input type="file" name="banner_image" accept="image/jpeg,image/gif,image/png">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="url">{$lang->url}</label> 
+        <input type="text" name="url" id="url" value="{$oAd->getUrl()}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="url_target">{$lang->url_target}</label> 
+        <select name="url_target" id="url_target" class="form-control">
+            <option value="_blank">{$lang->new_window}</option>
+            <option value="_self">{$lang->current_window}</option>
+        </select>
+    </div>
+    <div class="form-group" cond="$module_info->use_time === 'Y'">
+        <label for="ad_time">{$lang->ad_time}</label>
+        <select name="ad_time" class="form-control">
+            <option value="-1">{$lang->unlimited}</option>
+            <!--@if(is_array($ad_time_range) && count($ad_time_range))-->
+            <!--@foreach($ad_time_range as $key => $val)-->
+            <option value="{$val['time']}">{$val['title']}</option>
+            <!--@endforeach-->
+            <!--@else-->
+            <!--@end-->
+        </select>
+    </div>
+    <!--@if($adType == 'linead')-->
+    <!--@if($module_info->use_color == 'Y')-->
+    {@ $AdColorRange = explode(',',$module_info->ad_color_range)}
+    <div class="form-group">
+        <label for="ad_color">{$lang->text_color}</label>
+        <select id="ad_color" name="ad_color" class="colorPicker form-control">
+            <option value="-1">선택 안함</option>
+            <!--@foreach($AdColorRange as $key => $val)-->
+            <option value="{$val}" style="color:{$val};background-color:{$val};" selected|cond="$val === $oAd->getTextColor()">{$val}</option>
+            <!--@endforeach-->
+        </select>
+    </div>
+    <!--@end-->
+    <!--@if($module_info->use_bgcolor == 'Y')-->
+    {@ $AdBgColorRange = explode(',',$module_info->ad_bgcolor_range)}
+        <div class="form-group">
+        <label for="ad_bgcolor">{$lang->bg_color}</label>
+        <select id="ad_bgcolor" name="ad_bgcolor" class="colorPicker form-control">
+            <option value="-1">선택 안함</option>
+            <!--@foreach($AdBgColorRange as $key => $val)-->
+            <option value="{$val}" style="color:{$val};background-color:{$val};" selected|cond="$val === $oAd->getBgColor()">{$val}</option>
+            <!--@endforeach-->
+        </select>
+    </div>
+    <!--@end-->
+    <!--@end-->
+    <div class="form-group" cond="$adType == 'linead'">
+        <label for="">{$lang->ad_option}</label>
+        <div class="form-check">
+            <input name="is_notice" class="form-check-input" type="checkbox" value="Y" id="is_notice" checked|cond="$oAd->isNotice()">
+            <label class="form-check-label" for="is_notice">
+                <span style="color:#f42126">{$lang->notice}</span>
+            </label>
+        </div>
+        <div class="form-check">
+            <input name="used_style[]" class="form-check-input" type="checkbox" value="bold" id="use_bold" checked|cond="$oAd->isBold()">
+            <label class="form-check-label" for="use_bold">
+                <strong>{$lang->bold}</strong>
+            </label>
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" name="used_style[]" id="use_underline" value="underline" class="form-check-input" checked|cond="$oAd->isUnderline()">
+            <label for="use_underline" class="form-check-label"><u>{$lang->underline}</u></label> 
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" name="used_style[]" id="use_italic" value="italic" class="form-check-input" checked|cond="$oAd->isItalic()">
+            <label for="use_italic" class="form-check-label"><i>{$lang->italic}</i></label>
+        </div>
+    </div>
+    <div class="form-group">
+        <a href="{getUrl('act', 'dispAdManageList', 'document_srl', '', 'mid', '')}" class="btn btn-light">{$lang->cmd_back}</a>
+        <input type="reset" class="btn btn-light" value="{$lang->cmd_reset}">
+        <input type="submit" class="btn btn-primary" value="{$lang->cmd_save}">
+    </div>
+</form>

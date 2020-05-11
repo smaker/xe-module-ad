@@ -1,0 +1,9 @@
+textarea.form-control {
+	width: 100%;
+	resize: none;
+}
+
+.table-responsive th,
+.table-responsive td {
+	white-space: nowrap;
+}

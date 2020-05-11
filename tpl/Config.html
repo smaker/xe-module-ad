@@ -1,0 +1,51 @@
+<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/ad/tpl/Config/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
+<form id="fo_obj" action="{getUrl()}" method="post" ruleset="insertConfig" class="x_form-horizontal" no-error-return-url="true">
+	<input type="hidden" name="module" module="ad">
+	<input type="hidden" name="act" value="procAdInsertConfig">
+	<input type="hidden" name="xe_validator_id" value="modules/ad/tpl/Config/1">
+
+	<input type="hidden" name="admin_member" value="<!--@foreach($admin_member as $key => $val)--><!--@if($member_config->identifier == 'email_address')-->{$val->email_address},<!--@else-->{$val->user_id},<!--@end--><!--@end-->">
+
+	<section class="section">
+		<div class="form-group">
+			<label cond="$member_config->identifier == 'email_address'">
+				{$lang->admin_email_address}
+			</label>
+			<label cond="$member_config->identifier != 'email_address'">
+				{$lang->admin_id}
+			</label>
+
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<select name="_admin_member" id="admin_member" size="1" size="{count($admin_member)?count($admin_member):1}" class="form-control" multiple>
+						<option loop="$admin_member => $key, $val" value="{$val->email_address}"|cond="$member_config->identifier=='email_address'" value="{$val->user_id}"|cond="$member_config->identifier!='email_address'">
+							{$val->nick_name} (<block cond="$member_config->identifier=='email_address'">{$val->email_address}</block><block cond="$member_config->identifier!='email_address'">{$val->user_id}</block>)
+						</option>
+					</select>
+				</div>
+				<div class="col-md-1 col-sm-12">
+					<button class="btn btn-light btn-block" type="button" onclick="doDeleteAdmin()">{$lang->cmd_delete}</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 col-sm-12" style="margin-top: 12px;">
+					<input type="email"|cond="$member_config->identifier=='email_address'" type="text"|cond="$member_config->identifier!='email_address'" name="admin_id" id="input_manager" class="form-control" style="display: inline-block"> 
+				</div>
+				<div class="col-md-1 col-sm-12" style="margin-top: 12px;">
+					<button id="submit_manager" type="button" class="btn btn-secondary btn-block" onclick="doInsertAdmin()">{$lang->cmd_insert}</button>
+				</div>				
+			</div>
+			<div class="row" style="margin-top: 12px">
+				<div class="col-md-6">
+					<p>{$lang->help_manage_grant}</p>
+				</div>
+				<div class="col-md-1 col-sm-12">
+					<input type="submit" class="btn btn-primary btn-block" value="{$lang->cmd_save}">
+				</div>
+			</div>
+		</div>
+	</section>
+</form>

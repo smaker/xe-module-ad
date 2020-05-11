@@ -1,0 +1,24 @@
+<h3>{$lang->cmd_delete_module}</h3>
+
+<form action="./" method="get" onsubmit="return procFilter(this, delete_module)">
+<input type="hidden" name="page" value="{$page}">
+<input type="hidden" name="module_srl" value="{$module_info->module_srl}">
+
+    <h2>{$lang->confirm_delete}</h2>
+    <table cellspacing="0" class="x_table">
+    <tr>
+        <th scope="row"><div>{$lang->mid}</div></th>
+        <td class="wide">{$module_info->mid}</td>
+    </tr>
+    <tr>
+        <th scope="row"><div>{$lang->module}</div></th>
+        <td>{$module_info->module}</td>
+    </tr>
+    <tr>
+        <th colspan="2" class="button">
+            <input type="submit" value="{$lang->cmd_delete}" class="x_btn x_btn-inverse">
+            <input type="button" value="{$lang->cmd_back}" onclick="history.back(); return false;" class="x_btn x_btn-default">
+        </th>
+    </tr>
+    </table>
+</form>

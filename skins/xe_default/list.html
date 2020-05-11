@@ -1,0 +1,29 @@
+<!--#include("header.include.html")-->
+
+<table cellspacing="0" cellpadding="0" class="AdList">
+<!--@if(count($ad_list))-->
+<!--@foreach($ad_list as $no => $ad)-->
+<tr>
+	<td>
+		<span class="author<!--@if($ad->isNotice())--> notice<!--@end-->"><strong>[<!--@if($ad->isNotice())-->{$lang->notice}<!--@else-->{$ad->getNickName()}<!--@end-->]</strong></span> <span class="content">{$ad->getAdContent($module_info->content_cut_size, true, $module_info->ad_type)}</span>
+	</td>
+	<td class="regdate">({zdate($ad->get('regdate'))})</td>
+	<td>
+
+		<!--@if($ad->isGranted())-->&nbsp;<a href="{getUrl('act', 'dispAdDelete', 'document_srl', $ad->get('document_srl'))}" class="button small"><span>{$lang->cmd_delete}</span></a><!--@end-->
+	</td>
+</tr>
+<!--@if($ad->getRemainingTime())-->
+<tr>
+    <td colspan="3" class="remain">{$lang->remaining_time} : {$ad->getRemainingTime()}</td>
+</tr>
+<!--@end-->
+<!--@endforeach-->
+<!--@else-->
+<tr>
+    <td>{$lang->ads->msg->not_exists_own_registered_ads}</td>
+</tr>
+<!--@end-->
+</table>
+
+<!--#include("footer.include.html")-->

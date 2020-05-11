@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ruleset version="1.5.0">
+	<fields>
+		<field name="display_today_ad" />
+		<field name="admin_member" />
+	</fields>
+</ruleset>

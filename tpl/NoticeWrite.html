@@ -1,0 +1,186 @@
+<!--@if($module_srl)-->
+<!--%load_js_plugin("ui.datepicker")-->
+<h3><i class="xi-pen-o"></i> 2{$lang->dashboard->common->step} : {$lang->dashboard->notice->write}</h3>
+
+<div id="AdModule">
+<div class="AdRegister">
+	<form action="./" method="post" onsubmit="return procFilter(this, insert_notice)" id="fo_notice">
+		<input type="hidden" name="vid" value="{$vid}">
+		<input type="hidden" name="mid" value="{$mid}">
+		<input type="hidden" name="module_srl" value="{$module_srl}">
+
+		<div class="form-group">
+			<label>{$lang->ad_content}</label>
+			<input type="text" name="ad_content" value="" class="form-control">
+		</div>
+		<div class="form-group">
+			<label>{$lang->start_date}</label>
+			<div>
+				<input type="hidden" name="start_date" id="date_start" value="">
+				<input type="text" value="" readonly="readonly" class="inputDate" title="{$lang->about_start_date}">
+	
+				<input type="text" name="start_hour" value="" style="width:40px"> {$lang->hour}
+	
+				<input type="text" name="start_minute" value="" style="width:40px"> {$lang->minute}
+				<input type="text" name="start_second" value="" style="width:40px"> {$lang->second}
+			</div>
+		</div>
+		<div class="form-group endDate">
+			<label>{$lang->end_date}</label>
+			<div>
+				<input type="hidden" name="end_date" id="date_end" value="">
+				<input type="text" value="" readonly="readonly" class="inputDate" title="{$lang->about_end_date}">
+				<input type="text" name="end_hour" value="" disabled="disabled" style="width:40px"> {$lang->hour}
+				<input type="text" name="end_minute" value="" disabled="disabled" style="width:40px"> {$lang->minute} 
+				<input type="text" name="end_second" value="" disabled="disabled" style="width:40px"> {$lang->second}
+			</div>
+		</div>
+		<!--@if($module_info->use_time == 'Y')-->
+		<div class="adTime form-group">
+			<label>{$lang->ad_time}</label>
+			<!--@if(!count($module_info->ad_time_range))-->
+			{@ $module_info->ad_time_range = getModel('ad')->getDefaultAdTimeRange()}
+			<!--@end-->
+
+			{@ $AdTimeRange = explode(',',$module_info->ad_time_range)}
+			<select name="ad_time" class="itemPicker form-control">
+				<!--@if($grant->manager)--><option value="-1">{$lang->unlimited}</option><!--@end-->
+				<!--@if(is_array($AdTimeRange) && count($AdTimeRange)>0)-->
+				<!--@foreach($AdTimeRange as $key => $val)-->
+				<option value="{$val}">{$val}{$lang->time_word['hour']}</option>
+				<!--@endforeach-->
+				<!--@else-->
+				<!--@end-->
+			</select>
+			<input type="checkbox" id="passiveAssign" class="passiveAssign"> 
+			<label for="passiveAssign" title="광고 시간(종료일)을 직접 지정합니다." class="x_inline">직접 지정</label>
+		</div>
+		<!--@end-->
+		<div class="AdOption form-group">
+			<label>{$lang->ad_option}</label>
+
+			<div class="form-check">
+				<input type="checkbox" name="used_style" id="use_bold" value="bold" class="form-check-input"><label for="use_bold" class="d-inline orm-check-label"><strong>{$lang->bold}</strong></label>
+			</div>
+			<div class="form-check">
+				<input type="checkbox" name="used_style" id="use_underline" value="underline" class="form-check-input"><label for="use_underline" class="form-check-label"><u>{$lang->underline}</u></label>
+			</div>
+			<div class="form-check">
+				<input type="checkbox" name="used_style" id="use_italic" value="italic" class="form-check-input"><label for="use_italic" class="form-check-label"><i>{$lang->italic}</i></label>
+			</div>
+		</div>
+		{@ $AdColorRange = explode(',',$module_info->ad_color_range)}
+		<div class="form-group">
+			<label for="ad_color">{$lang->text_color}</label>
+			<select id="ad_color" name="ad_color" class="colorPicker form-control">
+				<option value="-1">선택 안함</option>
+				<!--@foreach($AdColorRange as $key => $val)-->
+					<!--@if(!$val)-->
+						{@continue}
+					<!--@end-->
+					<option value="{$val}" style="color:{$val};background-color:{$val};">{$val}</option>
+				<!--@endforeach-->
+			</select>
+		</div>
+		<div class="form-group">
+		{@ $AdBgColorRange = explode(',',$module_info->ad_bgcolor_range)}
+			<label for="ad_bgcolor">{$lang->bg_color}</label>
+			<select id="ad_bgcolor" name="ad_bgcolor" class="colorPicker form-control">
+				<option value="-1">선택 안함</option>
+				<!--@foreach($AdBgColorRange as $key => $val)-->
+					<!--@if(!$val)-->
+					{@continue}
+					<!--@end-->
+				<option value="{$val}" style="color:{$val};background-color:{$val};">{$val}</option>
+				<!--@endforeach-->
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="url">{$lang->url}</label>
+			<input type="url" id="url" name="url" value="" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label for="url_target">{$lang->url_target}</label>
+			<select id="url_target" name="url_target" class="itemPicker form-control">
+				<option value="_blank">{$lang->new_window}</option>
+				<option value="_self">{$lang->current_window}</option>
+			</select>
+		</div>
+		<div class="btnArea">
+			<a href="{getUrl('module_srl','')}" class="btn btn-light">{$lang->cmd_back}</a> 
+			<input type="submit" value="공지 등록" class="btn btn-dark">
+		</div>
+	</dl>
+	</form>
+</div>
+</div>
+<script type="text/javascript">
+(function($){
+    $('input.passiveAssign').change(function(){
+        if($(this).attr('checked')) {
+            $('.endDate').slideDown(125);
+            $('.adTime select').fadeOut(250);
+			console.log($('.endDate input:disabled'));
+            $('.endDate input:disabled').prop('disabled', false);
+            $('.adTime select:disabled').prop('disabled', true);
+        } else {
+            $('.endDate').slideUp(125);
+            $('.adTime select').fadeIn(250);
+            $('.endDate input:disabled').prop('disabled', true);
+            $('.adTime select:disabled').prop('disabled', false);
+        }
+    });
+
+    $(function(){
+        var option = { changeMonth: true, changeYear: true, gotoCurrent: false,yearRange:'-100:+10', onSelect:function(){
+
+            $(this).prev('input[type="hidden"]').val(this.value.replace(/-/g,""))}
+        };
+        $.extend(option,$.datepicker.regional['{$lang_type}']);
+        $(".inputDate").datepicker(option);
+    });
+})(jQuery);
+</script>
+<!--@else-->
+<h3><i class="xi-hand-pointing"></i> 1{$lang->dashboard->common->step} : {$lang->dashboard->module->select}</h3>
+<div class="infoText">{$lang->dashboard->desc->notice->select_module}</div>
+
+<!-- 목록 -->
+<form action="./" method="get" id="fo_list">
+<table cellspacing="0" class="table table-striped">
+<thead>
+    <tr>
+        <th scope="col">{$lang->no}</th>
+        <th scope="col">{$lang->mid}</th>
+        <th scope="col">{$lang->browser_title}</th>
+        <th scope="col">{$lang->regdate}</th>
+        <th scope="col">&nbsp;</th>
+    </tr>
+</thead>
+<tbody>
+    <!--@foreach($module_list as $no => $val)-->
+    <tr>
+        <td class="center number">{$no}</td>
+        <td>{htmlspecialchars($val->mid)}</td>
+        <td><a href="{getSiteUrl($val->domain,'','mid',$val->mid)}" onclick="window.open(this.href); return false;">{$val->browser_title}</a></td>
+        <td>{zdate($val->regdate,"Y-m-d")}</td>
+        <td>
+        <a href="{getUrl('act','dispAdNoticeWrite','module_srl',$val->module_srl)}" class="btn btn-light" title="{$lang->cmd_select}">{$lang->cmd_select}</a></td>
+    </tr>
+    <!--@end-->
+</tbody>
+</table>
+</form>
+
+<!-- 페이지 네비게이션 -->
+<ul class="pagination justify-content-center">
+	<li class="page-item<!--@if(!$page || $page == 1)--> disabled<!--@end-->"><a href="{getUrl('page', '')}" class="page-link">&laquo; {$lang->first_page}</a></li>
+
+	<!--@while($page_no = $page_navigation->getNextPage())-->
+		{@$last_page = $page_no}
+		<li class="page-item<!--@if($page_no == $page)--> active<!--@end-->"><a  href="{getUrl('page', $page_no)}" class="page-link">{$page_no}</a></li>
+	<!--@end-->
+
+	<li class="page-item<!--@if($page == $page_navigation->last_page)--> disabled<!--@end-->"><a href="{getUrl('page', $page_navigation->last_page)}" title="{$page_navigation->last_page}" class="page-link">{$lang->last_page} &raquo;</a></li>
+</ul>
+<!--@end-->

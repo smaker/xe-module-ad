@@ -1,0 +1,43 @@
+<query id="getAllAdListWithPage" action="select">
+	<tables>
+		<table name="ad" alias="A" />
+		<table name="documents" alias="D" type="left join">
+			<conditions>
+				<condition operation="equal" column="D.document_srl" default="A.document_srl" />
+			</conditions>
+		</table>
+		<table name="modules" alias="M" />
+	</tables>
+	<columns>
+		<column name="A.*" />
+		<column name="D.*" />
+		<column name="M.mid" />
+		<column name="M.browser_title" />
+	</columns>
+	<conditions>
+		<condition operation="in" column="D.module_srl" var="module_srl" filter="number" />
+		<condition operation="in" column="M.module_srl" default="D.module_srl" pipe="and" />
+		<condition operation="equal" column="D.member_srl" var="member_srl" filter="number" pipe="and" />
+		<condition operation="more" column="D.regdate" var="start_regdate" pipe="and" />
+		<condition operation="less" column="D.regdate" var="end_regdate" pipe="and" />
+		<condition operation="equal" column="D.is_notice" var="is_notice" pipe="and" />
+		<condition operation="like" column="D.content" var="s_content" pipe="and" />
+		<condition operation="like" column="D.user_id" var="s_user_id" pipe="and" />
+		<condition operation="like" column="D.member_srl" var="s_member_srl" pipe="and" />
+		<condition operation="like" column="D.user_name" var="s_user_name" pipe="and" />
+		<condition operation="like" column="D.nick_name" var="s_nick_name" pipe="and" />
+		<condition operation="more" column="D.readed_count" var="s_click_count" pipe="and" />
+		<group pipe="and">
+			<condition operation="more" column="A.end_date" var="end_date" default="curdate()" pipe="or" />
+			<condition operation="equal" column="A.end_date" default="-1" pipe="or" />
+		</group>
+		<condition operation="equal" column="A.ad_type" var="ad_type" pipe="and" />
+		<condition operation="equal" column="A.publish_status" var="publish_status" pipe="and" />
+	</conditions>
+	<navigation>
+		<index var="sort_index" default="D.list_order" order="asc" />
+		<list_count var="list_count" default="20" />
+		<page_count var="page_count" default="10" />
+		<page var="page" default="1" />
+	</navigation>
+</query>

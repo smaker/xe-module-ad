@@ -1,0 +1,96 @@
+<load target="https://cdn.jsdelivr.net/xeicon/2.3.3/xeicon.min.css" />
+
+<section class="row">
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header header-elements-sm-inline">
+				<h6 clas="card-title"><i class="xi-list-square" aria-hidden="true"></i> {$lang->ongoing_text_advertising}</h6>
+			</div>
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th class="d-none d-sm-block">{$lang->publisher}</th>
+								<th>{$lang->ad_content}</th>
+								<th class="d-none d-sm-block">{$lang->regdate}</th>
+							</tr>
+						</thead>
+						<!--@if(count($text_ad))-->
+						<tbody>
+							<!--@foreach($text_ad as $key => $oAd)-->
+							<tr>
+								<td class="d-none d-sm-block">
+									<i class="xi-user"></i> {$oAd->getNickName()}
+								</td>
+								<td>
+									<!--@if($oAd->getUrl())-->
+									<a href="{$oAd->getUrl()}" target="{$oAd->getUrlTarget()}">{$oAd->getAdContent()}</a>
+									<!--@else-->
+									{$oAd->getAdContent()}
+									<!--@end-->
+								</td>
+								<td class="d-none d-sm-block">
+									{zdate($oAd->get('regdate'), 'Y-m-d')}
+									<span class="time d-none d-sm-block">{zdate($oAd->get('regdate'), 'H:i:s')}</span>
+								</td>
+							</tr>
+							<!--@endforeach-->
+						</tbody>
+						<!--@else-->
+						<tbody>
+							<tr>
+								<td colspan="3">{$lang->ads->msg->not_exists_ongoing_advertising}</td>
+							</tr>
+						</tbody>
+						<!--@end-->
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-body">
+				<div class="card-header header-elements-sm-inline">
+					<h6 clas="card-title"><i class="xi-library-image-o" aria-hidden="true"></i>	{$lang->ongoing_image_advertising}</h6>
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+								<tr>
+									<th class="d-none d-sm-block">{$lang->publisher}</th>
+									<th>{$lang->banner_image}</th>
+									<th class="d-none d-sm-block">{$lang->regdate}</th>
+								</tr>
+							</thead>
+							<!--@if(count($image_ad))-->
+							<tbody>
+								<!--@foreach($image_ad as $key => $oAd)-->
+								<tr>
+									<td class="d-none d-sm-block">
+										<i class="xi-user"></i> {$oAd->getNickName()}
+									</td>
+									<td><a href="{$oAd->getUrl()}" target="{$oAd->getUrlTarget()}"><img src="{$oAd->getBannerPath()}" alt="{$oAd->getAdContentText()}"></a></td>
+									<td class="d-none d-sm-block">
+										{zdate($oAd->get('regdate'), 'Y-m-d')}
+										<span class="time d-none d-sm-block">{zdate($oAd->get('regdate'), 'H:i:s')}</span>
+									</td>
+								</tr>
+								<!--@endforeach-->
+							</tbody>
+							<!--@else-->
+							<tbody>
+								<tr>
+									<td colspan="3">{$lang->ads->msg->not_exists_ongoing_advertising}</td>
+								</tr>
+							</tbody>
+							<!--@end-->
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

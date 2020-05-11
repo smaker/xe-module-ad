@@ -1,0 +1,23 @@
+<query id="getTotalLinead" action="select">
+    <tables>
+        <table name="ad" alias="A" />
+        <table name="documents" alias="D" type="left join">
+            <conditions>
+                <condition operation="equal" column="D.document_srl" default="A.document_srl" />
+            </conditions>
+        </table>
+    </tables>
+    <columns>
+    </columns>
+    <conditions>
+        <condition operation="equal" column="D.is_notice" var="is_notice" />
+        <condition operation="equal" column="A.ad_type" default="linead" pipe="and" />
+		<group pipe="and">
+			<condition operation="more" column="A.end_date" var="end_date" default="curdate()" pipe="or" />
+			<condition operation="equal" column="A.end_date" default="-1" pipe="or" />
+		</group>
+    </conditions>
+    <navigation>
+        <index var="sort_index" order="order_type" />
+    </navigation>
+</query>
