@@ -2413,3 +2413,6 @@
 
 .bg-light-alpha {
   background-color: rgba(255, 255, 255, 0.1); }
+
+.bg-body {
+  background-color: #eeeded; }

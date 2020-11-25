@@ -6,6 +6,7 @@ jQuery("link[rel=stylesheet][href*='common/css/xe.min.css']").remove();
 
 <load target="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" />
 <load target="global_assets/css/icons/icomoon/styles.min.css" />
+<load target="global_assets/css/icons/fontawesome/styles.min.css" />
 
 <load target="assets/css/bootstrap.min.css" />
 <load target="assets/css/bootstrap_limitless.min.css" />
@@ -40,10 +41,11 @@ jQuery("link[rel=stylesheet][href*='common/css/xe.min.css']").remove();
 
     <!--// Content -->
 	<!-- Page content -->
+	
 	<div class="page-content pt-0">
 
 		<!-- Main sidebar -->
-		<div class="sidebar sidebar-light sidebar-main sidebar-expand-md align-self-start">
+		<div class="sidebar sidebar-light sidebar-main sidebar-expand-md">
 
 			<!-- Sidebar mobile toggler -->
 			<div class="sidebar-mobile-toggler text-center">
@@ -70,38 +72,12 @@ jQuery("link[rel=stylesheet][href*='common/css/xe.min.css']").remove();
 							</div>
 						</div>
 					</div>
-					<!-- User menu -->
-					<div class="sidebar-user">
-						<div class="card-body">
-							<div class="media">
-								<div class="mr-3">
-									<a href="#">
-									<!--@if($logged_info->profile_image->src)-->
-										<img src="{$logged_info->profile_image->src}" width="38" height="38" class="rounded-circle" alt="">
-									<!--@else-->
-										<img src="global_assets/images/placeholders/placeholder.jpg" width="38" height="38" class="rounded-circle" alt="">
-									<!--@end-->
-									</a>
-								</div>
-
-								<div class="media-body">
-									<div class="media-title font-weight-semibold">{$logged_info->nick_name}</div>
-								</div>
-
-								<div class="ml-3 align-self-center">
-									<a href="#" class="text-white"><i class="icon-cog3"></i></a>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- /user menu -->
-
 					
 					<!-- Main navigation -->
 					<div class="card-body p-0">
 						<ul class="nav nav-sidebar" data-nav-type="accordion">
 							<!-- Main -->
-							<li class="nav-item-header mt-0"><div class="text-uppercase font-size-xs line-height-xs">Main</div> <i class="icon-menu" title="Main"></i></li>
+							<li class="nav-item-header mt-0"><div class="text-uppercase font-size-xs line-height-xs">메뉴</div> <i class="icon-menu" title="Main"></i></li>
 							<li class="nav-item">
 								<a href="{getUrl('', 'module', 'ad', 'act', 'dispAdDashboard')}" class="nav-link<!--@if($act === 'dispAdDashboard')--> active<!--@end-->">
 									<i class="icon-home4"></i>
@@ -133,7 +109,7 @@ jQuery("link[rel=stylesheet][href*='common/css/xe.min.css']").remove();
 								</ul>
 							</li>
 							<li class="nav-item nav-item-submenu">
-								<a href="#" class="nav-link<!--@if($act == 'dispAdNoticeList' || $act=== 'dispAdNoticeWrite')--> active<!--@end-->"><i class="icon-color-sampler"></i> <span>공지 관리</span></a>
+								<a href="#" class="nav-link<!--@if($act == 'dispAdNoticeList' || $act=== 'dispAdNoticeWrite')--> active<!--@end-->"><i class="fa fa-bullhorn" aria-hidden="true"></i> <span>공지 관리</span></a>
 
 								<ul class="nav nav-group-sub" data-submenu-title="Ads">
 									<li class="nav-item"><a href="{getUrl('', 'module', 'ad', 'act', 'dispAdNoticeList')}" class="nav-link">공지 목록</a></li>
@@ -164,11 +140,82 @@ jQuery("link[rel=stylesheet][href*='common/css/xe.min.css']").remove();
 
 		<!-- Main content -->
 		<div class="content-wrapper">
+<div class="page-header page-header-light">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4><i class="icon-arrow-left52 mr-2"></i> <span class="font-weight-semibold">Home</span> - Dashboard</h4>
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+					</div>
 
+					<div class="header-elements d-none">
+						<div class="d-flex justify-content-center">
+							<a href="#" class="btn btn-link btn-float font-size-sm font-weight-semibold text-default legitRipple">
+								<i class="icon-bars-alt text-pink-300"></i>
+								<span>Statistics</span>
+							</a>
+							<a href="#" class="btn btn-link btn-float font-size-sm font-weight-semibold text-default legitRipple">
+								<i class="icon-calculator text-pink-300"></i>
+								<span>Invoices</span>
+							</a>
+							<a href="#" class="btn btn-link btn-float font-size-sm font-weight-semibold text-default legitRipple">
+								<i class="icon-calendar5 text-pink-300"></i>
+								<span>Schedule</span>
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="breadcrumb-line breadcrumb-line-light header-elements-md-inline">
+					{@
+						$title = Context::getBrowserTitle();
+						$title = str_replace('&gt;', '-', $title);
+						$parts = explode('-', $title);
+						list($subtitle, $subtitle2) = $parts
+					}
+					<div class="d-flex">
+						<div class="breadcrumb">
+							<a href="index.html" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> {$subtitle}</a>
+							<!--@if($subtitle2 && count($parts) >= 3)-->
+							<span class="breadcrumb-item active">{$subtitle2}</span>
+							<!--@end-->
+						</div>
+
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+					</div>
+
+					<div class="header-elements d-none">
+						<div class="breadcrumb justify-content-center">
+							<a href="#" class="breadcrumb-elements-item">
+								<i class="icon-comment-discussion mr-2"></i>
+								Support
+							</a>
+
+							<div class="breadcrumb-elements-item dropdown p-0">
+								<a href="#" class="breadcrumb-elements-item dropdown-toggle" data-toggle="dropdown">
+									<i class="icon-gear mr-2"></i>
+									Settings
+								</a>
+
+								<div class="dropdown-menu dropdown-menu-right">
+									<a href="#" class="dropdown-item"><i class="icon-user-lock"></i> Account security</a>
+									<a href="#" class="dropdown-item"><i class="icon-statistics"></i> Analytics</a>
+									<a href="#" class="dropdown-item"><i class="icon-accessibility"></i> Accessibility</a>
+									<div class="dropdown-divider"></div>
+									<a href="#" class="dropdown-item"><i class="icon-gear"></i> All settings</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<!-- Content area -->
 			<div class="content">
-				<h2 cond="$lang->ads->dashboard_menus[Context::get('act')]"><i class="{$lang->ads->dashboard_icon[Context::get('act')]}" cond="$lang->ads->dashboard_icon[Context::get('act')]"></i> {$lang->ads->dashboard_menus[Context::get('act')]}</h2>
-				{$content}
+				<div class="card"|cond="$act != 'dispAdDashboard'">
+					<div class="card-body"|cond="$act != 'dispAdDashboard'">
+						<h2 cond="$lang->ads->dashboard_menus[Context::get('act')]"><i class="{$lang->ads->dashboard_icon[Context::get('act')]}" cond="$lang->ads->dashboard_icon[Context::get('act')]"></i> {$lang->ads->dashboard_menus[Context::get('act')]}</h2>
+						{$content}
+					</div>
+				</div>
 			</div>
 			<!-- /content area -->
 

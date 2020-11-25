@@ -1,59 +1,57 @@
-<div class="card">
-	<!-- 목록 -->
-	<form action="./" method="get" id="fo_list">
-		<table class="table table-striped">
-			<thead>
+<!-- 목록 -->
+<form action="./" method="get" id="fo_list">
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<th scope="col">{$lang->no}</th>
+			<th scope="col">{$lang->mid}</th>
+			<th scope="col">{$lang->browser_title}</th>
+			<th scope="col">{$lang->regdate}</th>
+			<th scope="col">&nbsp;</th>
+		</tr>
+	</thead>
+		<tbody>
+			<!--@foreach($module_list as $no => $val)-->
 			<tr>
-				<th scope="col">{$lang->no}</th>
-				<th scope="col">{$lang->mid}</th>
-				<th scope="col">{$lang->browser_title}</th>
-				<th scope="col">{$lang->regdate}</th>
-				<th scope="col">&nbsp;</th>
+				<td class="center number">{$no}</td>
+				<td>{htmlspecialchars($val->mid)}</td>
+				<td><a href="{getSiteUrl($val->domain,'','mid',$val->mid)}" target="_blank">{$val->browser_title}</a></td>
+				<td>{zdate($val->regdate,"Y-m-d")}</td>
+				<td>
+				<a href="{getUrl('act','dispAdModuleInfo','module_srl',$val->module_srl)}" title="{$lang->cmd_setup}"><i class="xi-cog"></i> {$lang->cmd_setup}</a>
+				<!--@if($logged_info->is_admin == 'Y')-->
+				<a href="{getUrl('','module','module','act','dispModuleAdminCopyModule','module_srl',$val->module_srl)}" onclick="popopen(this.href);return false;" title="{$lang->cmd_copy}"><i class="xi-documents-o"></i> {$lang->cmd_copy}</a>
+				<a href="{getUrl('act','dispAdDeleteModule','module_srl', $val->module_srl)}" title="{$lang->cmd_delete}"><i class="xi-close-min"></i> {$lang->cmd_delete}</a>
+				<!--@end-->
+				</td>
 			</tr>
-		</thead>
-			<tbody>
-				<!--@foreach($module_list as $no => $val)-->
-				<tr>
-					<td class="center number">{$no}</td>
-					<td>{htmlspecialchars($val->mid)}</td>
-					<td><a href="{getSiteUrl($val->domain,'','mid',$val->mid)}" target="_blank">{$val->browser_title}</a></td>
-					<td>{zdate($val->regdate,"Y-m-d")}</td>
-					<td>
-					<a href="{getUrl('act','dispAdModuleInfo','module_srl',$val->module_srl)}" title="{$lang->cmd_setup}"><i class="xi-cog"></i> {$lang->cmd_setup}</a>
-					<!--@if($logged_info->is_admin == 'Y')-->
-					<a href="{getUrl('','module','module','act','dispModuleAdminCopyModule','module_srl',$val->module_srl)}" onclick="popopen(this.href);return false;" title="{$lang->cmd_copy}"><i class="xi-documents-o"></i> {$lang->cmd_copy}</a>
-					<a href="{getUrl('act','dispAdDeleteModule','module_srl', $val->module_srl)}" title="{$lang->cmd_delete}"><i class="xi-close-min"></i> {$lang->cmd_delete}</a>
-					<!--@end-->
-					</td>
-				</tr>
-				<!--@end-->
-			</tbody>
-		</table>
+			<!--@end-->
+		</tbody>
+	</table>
+</form>
+
+<div class="clearfix">
+	<div class="float-right mr-3">
+		<a href="{getUrl('act', 'dispAdInsertModule', 'module_srl', '')}" class="btn btn-primary">{$lang->cmd_make}</a>
+	</div>
+</div>
+
+<div class="clearfix" style="margin: 0 0 12px">
+	<form aria-label="Page navigation" cond="$page_navigation" no-error-return-url="true">
+		<input type="hidden" name="module" value="{$module}">
+		<input type="hidden" name="act" value="{$act}">
+		<input cond="$order_target" type="hidden" name="order_target" value="{$order_target}">
+		<input cond="$order_type" type="hidden" name="order_type" value="{$order_type}">
+		<input cond="$search_keyword" type="hidden" name="search_keyword" value="{$search_keyword}">
+
+		<ul class="pagination justify-content-center">
+			<li class="page-item<!--@if(!$page || $page == 1)--> disabled<!--@end-->"><a href="{getUrl('page', '')}" class="page-link">&laquo; {$lang->first_page}</a></li>
+			<!--@while($page_no = $page_navigation->getNextPage())-->
+			{@$last_page = $page_no}
+			<li class="page-item<!--@if($page_no == $page)--> active<!--@end-->"><a href="{getUrl('page', $page_no)}" class="page-link">{$page_no}</a></li>
+			<!--@end-->
+
+			<li class="page-item<!--@if($page == $page_navigation->last_page)--> disabled<!--@end-->"><a href="{getUrl('page', $page_navigation->last_page)}" title="{$page_navigation->last_page}" class="page-link">{$lang->last_page} &raquo;</a></li>
+		</ul>
 	</form>
-	
-	<div class="clearfix">
-	    <div class="float-right mr-3">
-	        <a href="{getUrl('act', 'dispAdInsertModule', 'module_srl', '')}" class="btn btn-primary">{$lang->cmd_make}</a>
-	    </div>
-	</div>
-	
-	<div class="clearfix" style="margin: 0 0 12px">
-		<form aria-label="Page navigation" cond="$page_navigation" no-error-return-url="true">
-			<input type="hidden" name="module" value="{$module}">
-			<input type="hidden" name="act" value="{$act}">
-			<input cond="$order_target" type="hidden" name="order_target" value="{$order_target}">
-			<input cond="$order_type" type="hidden" name="order_type" value="{$order_type}">
-			<input cond="$search_keyword" type="hidden" name="search_keyword" value="{$search_keyword}">
-	
-			<ul class="pagination justify-content-center">
-				<li class="page-item<!--@if(!$page || $page == 1)--> disabled<!--@end-->"><a href="{getUrl('page', '')}" class="page-link">&laquo; {$lang->first_page}</a></li>
-				<!--@while($page_no = $page_navigation->getNextPage())-->
-				{@$last_page = $page_no}
-				<li class="page-item<!--@if($page_no == $page)--> active<!--@end-->"><a href="{getUrl('page', $page_no)}" class="page-link">{$page_no}</a></li>
-				<!--@end-->
-	
-				<li class="page-item<!--@if($page == $page_navigation->last_page)--> disabled<!--@end-->"><a href="{getUrl('page', $page_navigation->last_page)}" title="{$page_navigation->last_page}" class="page-link">{$lang->last_page} &raquo;</a></li>
-			</ul>
-		</form>
-	</div>
 </div>
