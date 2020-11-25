@@ -1,2 +1,6 @@
 .vscode/sftp.json
 phpdoc-cache-*
+css
+font
+images
+js
