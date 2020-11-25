@@ -39,6 +39,16 @@ class adView extends ad
 		// 관리자 action인 경우
 		if($this->_isAdminAct())
 		{
+			if(!defined('__DISABLE_DEFAULT_CSS__'))
+			{
+				define('__DISABLE_DEFAULT_CSS__', true);
+			}
+
+			if(!defined('DISABLE_XE_BTN_STYLES'))
+			{
+				define('DISABLE_XE_BTN_STYLES', true);
+			}
+
 			$this->oAdModel = $oAdModel = getModel('ad');
 			// module 모듈의 model 객체 생성
 			$oModuleModel = getModel('module');
@@ -505,6 +515,7 @@ class adView extends ad
 			$this->setPageTitle($lang->ads->dashboard_menus[Context::get('act')]);
 
 			// 템플릿 파일 지정
+			$this->setTemplatePath($this->module_path . 'tpl');
 			$this->setTemplateFile('AdList');
 		}
 
@@ -536,6 +547,7 @@ class adView extends ad
 			$this->setPageTitle($lang->ads->dashboard_menus[Context::get('act')]);
 
 			// 템플릿 파일 지정
+			$this->setTemplatePath($this->module_path . 'tpl');
 			$this->setTemplateFile('ModuleList');
 		}
 
@@ -686,6 +698,7 @@ class adView extends ad
 			$this->setPageTitle($this->module_menus[Context::get('act')]);
 
 			// 템플릿 파일 지정
+			$this->setTemplatePath($this->module_path . 'tpl');
 			$this->setTemplateFile('SkinInfo');
 		}
 
@@ -785,6 +798,7 @@ class adView extends ad
 			}
 
 			// 템플릿 파일 지정
+			$this->setTemplatePath($this->module_path . 'tpl');
 			$this->setTemplateFile('NoticeWrite');
 		}
 
@@ -794,6 +808,7 @@ class adView extends ad
 		function dispAdFindUserId()
 		{
 			// 템플릿 파일 지정
+			$this->setTemplatePath($this->module_path . 'tpl');
 			$this->setTemplateFile('FindUserID');
 		}
 
@@ -840,6 +855,8 @@ class adView extends ad
 			$popup_list = array();
 
 			Context::set('popup_list', $popup_list);
+
+			$this->setTemplatePath($this->module_path . 'tpl');
 			$this->setTemplateFile('PopupList');
 		}
 
@@ -857,6 +874,8 @@ class adView extends ad
 			$oDocument = getModel('document')->getDocument($document_srl);
 
 			Context::set('oDocument', $oDocument);
+
+			$this->setTemplatePath($this->module_path . 'tpl');
 			$this->setTemplateFile('PopupInsert');
 		}
 	}
